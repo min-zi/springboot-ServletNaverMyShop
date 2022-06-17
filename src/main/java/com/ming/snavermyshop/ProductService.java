@@ -8,8 +8,7 @@ public class ProductService {
 
     private ProductRepository productRepository;
 
-    public ProductService() {
-        ProductRepository productRepository = new ProductRepository();
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
