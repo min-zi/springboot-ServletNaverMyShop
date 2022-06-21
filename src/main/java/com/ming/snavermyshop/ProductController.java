@@ -1,17 +1,19 @@
 package com.ming.snavermyshop;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor // final로 선언된 멤버 변수를 자동으로 생성함
+// @RequiredArgsConstructor // final로 선언된 멤버 변수를 자동으로 생성함
 @RestController // ResponseBody + Controller, JSON으로 데이터를 주고받음을 선언함
 public class ProductController {
 
     private final ProductService productService;
 
+    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }

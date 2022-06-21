@@ -1,9 +1,11 @@
 package com.ming.snavermyshop;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ProductService {
 
     private ProductRepository productRepository;
