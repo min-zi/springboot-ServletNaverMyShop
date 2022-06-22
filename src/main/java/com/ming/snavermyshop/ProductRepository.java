@@ -1,5 +1,10 @@
 package com.ming.snavermyshop;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, Long> { }
+
+/*
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,3 +131,4 @@ public class ProductRepository {
         return products;
     }
 }
+*/

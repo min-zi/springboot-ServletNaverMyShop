@@ -1,10 +1,9 @@
 package com.ming.snavermyshop;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 // @RequiredArgsConstructor // final로 선언된 멤버 변수를 자동으로 생성함
@@ -13,7 +12,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Autowired
+    @Autowired // 사실 생성자가 하나이기 때문에 생략 가능
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
