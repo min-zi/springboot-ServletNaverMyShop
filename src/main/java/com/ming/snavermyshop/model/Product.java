@@ -1,5 +1,6 @@
-package com.ming.snavermyshop;
+package com.ming.snavermyshop.model;
 
+import com.ming.snavermyshop.dto.ProductRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

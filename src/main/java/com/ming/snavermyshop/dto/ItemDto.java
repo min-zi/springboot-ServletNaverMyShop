@@ -1,4 +1,4 @@
-package com.ming.snavermyshop;
+package com.ming.snavermyshop.dto;
 
 import lombok.Getter;
 

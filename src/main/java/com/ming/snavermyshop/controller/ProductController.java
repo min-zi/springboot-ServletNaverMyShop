@@ -1,5 +1,9 @@
-package com.ming.snavermyshop;
+package com.ming.snavermyshop.controller;
 
+import com.ming.snavermyshop.model.Product;
+import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
+import com.ming.snavermyshop.dto.ProductRequestDto;
+import com.ming.snavermyshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

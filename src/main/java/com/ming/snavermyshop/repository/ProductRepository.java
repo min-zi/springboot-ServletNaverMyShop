@@ -1,5 +1,6 @@
-package com.ming.snavermyshop;
+package com.ming.snavermyshop.repository;
 
+import com.ming.snavermyshop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Long> { }
