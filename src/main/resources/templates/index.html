@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:title" content="나만의 네이버 최저가 장바구니">
+    <meta property="og:description" content="찜한 상품의 최저가 알림을 받아보세요!">
+    <meta property="og:image" content="images/og_navermyshop.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="basic.js"></script>
+    <title>네이버 최저가 장바구니</title>
+</head>
+<body>
+<div class="header" style="position:relative;">
+    <div id="header-title-login-user">
+        <span th:text="${username}"></span> 님의
+    </div>
+    <div id="header-title-select-shop">
+        My Lowest Price Cart
+    </div>
+
+    <form id="my_form" method="post" action="/user/logout">
+        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
+    </form>
+</div>
+<div class="nav">
+    <div class="nav-see active">
+        장바구니
+    </div>
+    <div class="nav-search">
+        가져오기
+    </div>
+</div>
+<div id="see-area">
+    <div id="product-container">
+
+    </div>
+</div>
+<div id="search-area">
+    <div>
+        <input type="text" id="query">
+        <!--    <img src="images/icon-search.png" alt="">-->
+    </div>
+    <div id="search-result-box">
+
+    </div>
+    <div id="container" class="popup-container">
+        <div class="popup">
+            <button id="close" class="close">
+                X
+            </button>
+            <h1>⏰ 최저가 설정</h1>
+            <p>이 상품이 얼마였으면 좋겠어요?<br/> 지금 설정해둔 가격보다 낮은 최저가가 떴을 때<br/> 표시해 드릴게요</p>
+            <div>
+                <input type="text" id="myprice" placeholder="200,000">원
+            </div>
+            <button class="cta" onclick="setMyprice()">설정하기</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
