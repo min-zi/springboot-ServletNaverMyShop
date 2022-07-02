@@ -30,8 +30,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         // 회원 관리 처리 API (POST /user/**) 에 대해 CSRF 무시
-        http.csrf()
-                .ignoringAntMatchers("/user/**");
+        /*http.csrf()
+                 .ignoringAntMatchers("/user/**");*/
+
+        // CSRF protection 을 비활성화
+        http.csrf().disable();
 
         //로그인 화면에서 인증 전에 보여줘야되는 것들은 여기서 허용해줘야 됨
         http.authorizeRequests()
