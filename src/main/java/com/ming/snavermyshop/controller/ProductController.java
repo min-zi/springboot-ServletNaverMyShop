@@ -3,9 +3,11 @@ package com.ming.snavermyshop.controller;
 import com.ming.snavermyshop.model.Product;
 import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
 import com.ming.snavermyshop.dto.ProductRequestDto;
+import com.ming.snavermyshop.model.UserRoleEnum;
 import com.ming.snavermyshop.security.UserDetailsImpl;
 import com.ming.snavermyshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +64,8 @@ public class ProductController {
         return productService.getProducts(userId);
     }
 
-    /////////// 로그인한 회원이 등록한 관심 상품 조회 ///////////
+    /////////// 관리자용 관심 상품 전체 조회 ///////////
+    @Secured(value = UserRoleEnum.Authority.ADMIN)
     @GetMapping("/api/admin/products")
     public List<Product> getAllProducts() {
 
