@@ -65,35 +65,6 @@ public class UserService {
 
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
-
-
-    }
-
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) {
-        // HTTP Header 생성
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        // HTTP 요청 보내기
-        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
-        response = rt.exchange(
-                "https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST,
-                kakaoUserInfoRequest,
-                String.class
-        );
-
-        responseBody = response.getBody();
-        jsonNode = objectMapper.readTree(responseBody);
-        Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
-
-        System.out.println("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
-
-        KakaoUserInfoDto kakaoUserInfoDto = new KakaoUserInfoDto(id, nickname, email);
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -126,4 +97,36 @@ public class UserService {
 
         return jsonNode.get("access_token").asText();
     }
+
+
+    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+        // HTTP Header 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // HTTP 요청 보내기
+        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoUserInfoRequest,
+                String.class
+        );
+
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        Long id = jsonNode.get("id").asLong();
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+        String email = jsonNode.get("kakao_account")
+                .get("email").asText();
+
+        System.out.println("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
+
+        return new KakaoUserInfoDto(id, nickname, email);
+    }
+
 }
