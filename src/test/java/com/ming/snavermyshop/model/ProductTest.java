@@ -17,7 +17,7 @@ class ProductTest {
         private String link;
         private int lprice;
 
-        @BeforeEach
+        @BeforeEach //모든 @Test 는 수행 전에 무조건 이부분을 거치고 수행함
         void setup() {
             userId = 100L;
             title = "오리온 꼬북칩 초코츄러스맛 160g";

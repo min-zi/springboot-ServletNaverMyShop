@@ -5,12 +5,8 @@ import com.ming.snavermyshop.validator.ProductValidator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 @Setter
 @Getter // get 함수를 일괄적으로 만들어줌

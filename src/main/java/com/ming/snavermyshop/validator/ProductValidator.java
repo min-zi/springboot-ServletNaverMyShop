@@ -3,10 +3,6 @@ package com.ming.snavermyshop.validator;
 import com.ming.snavermyshop.dto.ProductRequestDto;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 @Component
 public class ProductValidator {
     public static void validateProductInput(ProductRequestDto requestDto, Long userId) {
