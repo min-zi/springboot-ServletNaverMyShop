@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(
+@WebMvcTest( // Controller 를 테스트
         controllers = {UserController.class, ProductController.class},
         excludeFilters = {
                 @ComponentScan.Filter(
@@ -56,7 +56,7 @@ class UserProductMvcTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockBean // 가짜 빈
     UserService userService;
 
     @MockBean
@@ -68,15 +68,15 @@ class UserProductMvcTest {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(springSecurity(new MockSpringSecurityFilter()))
+                .apply(springSecurity(new MockSpringSecurityFilter())) // 스프링 시큐리티에 가짜 사용자 정보를 넣어주는 필터 추가함
                 .build();
     }
 
     private void mockUserSetup() {
-        // Mock 테스트 유져 생성
-        String username = "제이홉";
-        String password = "hope!@#";
-        String email = "hope@sparta.com";
+        // 상품 등록해보기 위해 Mock 테스트 유져 생성
+        String username = "우영우";
+        String password = "wutotheyoungtothewu!@#";
+        String email = "wu0wu@naver.com";
         UserRoleEnum role = UserRoleEnum.USER;
         User testUser = new User(username, password, email, role);
         UserDetailsImpl testUserDetails = new UserDetailsImpl(testUser);
@@ -98,9 +98,9 @@ class UserProductMvcTest {
     void test2() throws Exception {
         // given
         MultiValueMap<String, String> signupRequestForm = new LinkedMultiValueMap<>();
-        signupRequestForm.add("username", "제이홉");
-        signupRequestForm.add("password", "hope!@#");
-        signupRequestForm.add("email", "hope@sparta.com");
+        signupRequestForm.add("username", "우영우");
+        signupRequestForm.add("password", "wutotheyoungtothewu!@#");
+        signupRequestForm.add("email", "wu0wu@naver.com");
         signupRequestForm.add("admin", "false");
 
         // when - then
@@ -128,14 +128,14 @@ class UserProductMvcTest {
                 lPrice
         );
 
-        String postInfo = objectMapper.writeValueAsString(requestDto);
+        String postInfo = objectMapper.writeValueAsString(requestDto); // JSON 으로 만들어 줌
 
         // when - then
         mvc.perform(post("/api/products")
                         .content(postInfo)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .principal(mockPrincipal)
+                        .principal(mockPrincipal) // 스프링 시큐리티에서 테스트 동안에 로그인 되어있는 사용자라고 인식함
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
