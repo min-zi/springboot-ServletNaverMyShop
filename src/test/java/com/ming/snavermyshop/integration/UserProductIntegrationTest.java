@@ -146,7 +146,7 @@ public class UserProductIntegrationTest {
     void test5() {
         // given
         // when
-        List<Product> productList = productService.getProducts(userId);
+        List<Product> productList = productService.getProducts(userId, page, size, sortBy, isAsc);
         // then
         // 1. 전체 상품에서 테스트에 의해 생성된 상품 찾아오기 (상품의 id 로 찾음)
         Long createdProductId = this.createdProduct.getId();

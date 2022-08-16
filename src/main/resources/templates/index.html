@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="basic.js"></script>
-    <title>네이버 최저가 장바구니</title>
+
+    <script src="basic.js"></script>
+    <title>나만의 셀렉샵</title>
 </head>
 <body>
 <div class="header" style="position:relative;">
@@ -20,30 +22,39 @@
         <span th:text="${username}"></span> 님의
     </div>
     <div id="header-title-select-shop">
-        My Lowest Price Cart
+        Select Shop
     </div>
-
-    <form id="my_form" method="post" action="/user/logout">
-        <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>
-    </form>
+    <a id="logout-text" href="/user/logout">
+        로그아웃
+    </a>
 </div>
 <div class="nav">
     <div class="nav-see active">
-        장바구니
+        모아보기
     </div>
     <div class="nav-search">
-        가져오기
+        탐색하기
     </div>
 </div>
 <div id="see-area">
-    <div id="product-container">
-
+    <div class="pagination">
+        정렬:
+        <select id="sorting" onchange="showProduct()">
+            <option value="id">ID</option>
+            <option value="title">상품명</option>
+            <option value="lprice">최저가</option>
+        </select>
+        <input type="radio" name="isAsc" value="true" onchange="showProduct()" checked /> 오름차순
+        <input type="radio" name="isAsc" value="false" onchange="showProduct()" /> 내림차순
     </div>
+    <div id="pagination" class="pagination"></div>
+    <ul id="product-container">
+    </ul>
 </div>
 <div id="search-area">
     <div>
         <input type="text" id="query">
-        <!--    <img src="images/icon-search.png" alt="">-->
+        <!-- <img src="images/icon-search.png" alt="">-->
     </div>
     <div id="search-result-box">
 
