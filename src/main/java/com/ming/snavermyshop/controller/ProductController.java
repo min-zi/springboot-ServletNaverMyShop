@@ -1,8 +1,9 @@
 package com.ming.snavermyshop.controller;
 
-import com.ming.snavermyshop.model.Product;
 import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
 import com.ming.snavermyshop.dto.ProductRequestDto;
+import com.ming.snavermyshop.model.Product;
+import com.ming.snavermyshop.model.User;
 import com.ming.snavermyshop.model.UserRoleEnum;
 import com.ming.snavermyshop.security.UserDetailsImpl;
 import com.ming.snavermyshop.service.ProductService;
@@ -12,8 +13,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.*;
-import java.util.List;
 
 // @RequiredArgsConstructor // final로 선언된 멤버 변수를 자동으로 생성함
 @RestController // ResponseBody + Controller, JSON으로 데이터를 주고받음을 선언함
@@ -82,5 +81,17 @@ public class ProductController {
     ) {
         page = page - 1;
         return productService.getAllProducts(page, size, sortBy, isAsc);
+    }
+
+    /////////// 상품에 폴더 추가 ///////////
+    @PostMapping("/api/products/{productId}/folder")
+    public Long addFolder(
+            @PathVariable Long productId,
+            @RequestParam Long folderId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        User user = userDetails.getUser();
+        Product product = productService.addFolder(productId, folderId, user);
+        return product.getId();
     }
 }

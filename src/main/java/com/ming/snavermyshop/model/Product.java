@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter // get 함수를 일괄적으로 만들어줌
@@ -38,8 +39,12 @@ public class Product {
     @Column(nullable = false)
     private Long userId;
 
+    @ManyToMany
+    private List<Folder> folderList;
+
     // 관심 상품 만들어주는 생성자
     public Product(ProductRequestDto requestDto, Long userId) {
+        // 입력값 Validation
         ProductValidator.validateProductInput(requestDto, userId);
 
         // 관심상품을 등록한 회원 테이블 Id 저장
@@ -49,5 +54,9 @@ public class Product {
         this.link = requestDto.getLink();
         this.lprice = requestDto.getLprice();
         this.myprice = 0;
+    }
+
+    public void addFolder(Folder folder) {
+        this.folderList.add(folder);
     }
 }

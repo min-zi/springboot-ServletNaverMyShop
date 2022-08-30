@@ -2,7 +2,10 @@ package com.ming.snavermyshop.service;
 
 import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
 import com.ming.snavermyshop.dto.ProductRequestDto;
+import com.ming.snavermyshop.model.Folder;
 import com.ming.snavermyshop.model.Product;
+import com.ming.snavermyshop.model.User;
+import com.ming.snavermyshop.repository.FolderRepository;
 import com.ming.snavermyshop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,16 +13,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final FolderRepository folderRepository;
+
     public static final int MIN_MY_PRICE = 100;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService( ProductRepository productRepository, FolderRepository folderRepository) {
         this.productRepository = productRepository;
+        this.folderRepository = folderRepository;
     }
 
     public Product createProduct(ProductRequestDto requestDto, Long userId ) {
@@ -62,5 +69,27 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return productRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public Product addFolder(Long productId, Long folderId, User user) {
+        // 1) 상품을 조회함
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NullPointerException("해당 상품 아이디가 존재하지 않습니다."));
+
+        // 2) 관심상품을 조회함
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new NullPointerException("해당 폴더 아이디가 존재하지 않습니다."));
+
+        // 3) 조회한 폴더와 관심상품이 모두 로그인한 회원의 소유인지 확인함
+        Long loginUserId = user.getId();
+        if (!product.getUserId().equals(loginUserId) || !folder.getUser().getId().equals(loginUserId)) {
+            throw new IllegalArgumentException("회원님의 관심상품이 아니거나, 회원님의 폴더가 아닙니다~^^");
+        }
+
+        // 4) 상품에 폴더를 추가함
+        product.addFolder(folder);
+
+        return product;
     }
 }

@@ -7,6 +7,7 @@ import com.ming.snavermyshop.security.UserDetailsImpl;
 import com.ming.snavermyshop.service.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,13 @@ public class FolderController {
 
         List<Folder> folders = folderService.addFolders(folderNames, user);
         return folders;
+    }
+
+    // 회원이 등록한 모든 폴더 조회
+    @GetMapping("api/folders")
+    public List<Folder> getFolders(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return folderService.getFolders(userDetails.getUser());
     }
 }
