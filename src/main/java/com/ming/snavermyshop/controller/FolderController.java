@@ -52,7 +52,7 @@ public class FolderController {
             @RequestParam boolean isAsc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        page = page - 1;
+        page = page - 1; // 서버에서 0 페이지로
         return folderService.getProductsInFolder(
                 folderId,
                 page,

@@ -32,11 +32,16 @@ public class FolderService {
 
     // 로그인한 회원에 폴더들 등록
     public List<Folder> addFolders(List<String> folderNames, User user) {
-        List<Folder> folderList = new ArrayList<>();
+        // 1) 입력으로 들어온 폴더 이름을 기준으로, 회원이 이미 생성한 폴더들을 조회합니다.
+        List<Folder> existFolderList = folderRepository.findAllByUserAndNameIn(user, folderNames);
 
+        List<Folder> folderList = new ArrayList<>();
         for (String folderName : folderNames) {
-            Folder folder = new Folder(folderName, user);
-            folderList.add(folder);
+            // 2) 이미 생성한 폴더가 아닌 경우만 폴더 생성
+            if (!isExistFolderName(folderName, existFolderList)) {
+                Folder folder = new Folder(folderName, user);
+                folderList.add(folder);
+            }
         }
 
         return folderRepository.saveAll(folderList);
@@ -61,5 +66,16 @@ public class FolderService {
         Pageable pageable = PageRequest.of(page, size, sort);
         Long userId = user.getId();
         return productRepository.findAllByUserIdAndFolderList_Id(userId, folderId, pageable);
+    }
+
+    private boolean isExistFolderName(String folderName, List<Folder> existFolderList) {
+        // 기존 폴더 리스트에서 folder name 이 있는지?
+        for (Folder existFolder : existFolderList) {
+            if (existFolder.getName().equals(folderName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

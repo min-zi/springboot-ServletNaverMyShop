@@ -71,7 +71,7 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    @Transactional
+    @Transactional // 이 클래스에 트랜잭션 기능이 적용된 프록시 객체가 생성됨
     public Product addFolder(Long productId, Long folderId, User user) {
         // 1) 상품을 조회함
         Product product = productRepository.findById(productId)
@@ -89,6 +89,7 @@ public class ProductService {
 
         // 4) 상품에 폴더를 추가함
         product.addFolder(folder);
+        // productRepository.save(product); // @Transactional 과 같은 역할
 
         return product;
     }
