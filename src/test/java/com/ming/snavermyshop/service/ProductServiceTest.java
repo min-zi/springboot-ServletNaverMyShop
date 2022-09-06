@@ -3,6 +3,7 @@ package com.ming.snavermyshop.service;
 import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
 import com.ming.snavermyshop.dto.ProductRequestDto;
 import com.ming.snavermyshop.model.Product;
+import com.ming.snavermyshop.repository.FolderRepository;
 import com.ming.snavermyshop.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ import static org.mockito.Mockito.when;
 class ProductServiceTest {
     @Mock // 가짜 객체가 자동으로 생성
     ProductRepository productRepository;
+
+    @Mock
+    FolderRepository folderRepository;
 
     @Test
     @DisplayName("관심 상품 희망가 - 최저가 이상으로 변경")
@@ -43,7 +47,7 @@ class ProductServiceTest {
 
         Product product = new Product(requestProductDto, userId);
 
-        ProductService productService = new ProductService(productRepository);
+        ProductService productService = new ProductService(productRepository, folderRepository);
         when(productRepository.findById(productId)) // input
                 .thenReturn(Optional.of(product)); // output 결과에 대해 명시해줘야 됨 (findById 의 리턴타입이 Optional 임)
 
@@ -65,7 +69,7 @@ class ProductServiceTest {
                 myprice
         );
 
-        ProductService productService = new ProductService(productRepository);
+        ProductService productService = new ProductService(productRepository, folderRepository);
 
         // when
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
