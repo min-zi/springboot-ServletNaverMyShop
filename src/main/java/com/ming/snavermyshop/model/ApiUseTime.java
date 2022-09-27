@@ -16,7 +16,7 @@ public class ApiUseTime {
     @Id
     private Long id;
 
-    @OneToOne
+    @OneToOne // 회원 한명 당 하나의 api 사용 시간
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 

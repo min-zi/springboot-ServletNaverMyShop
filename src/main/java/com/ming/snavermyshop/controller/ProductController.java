@@ -2,11 +2,9 @@ package com.ming.snavermyshop.controller;
 
 import com.ming.snavermyshop.dto.ProductMypriceRequestDto;
 import com.ming.snavermyshop.dto.ProductRequestDto;
-import com.ming.snavermyshop.model.ApiUseTime;
 import com.ming.snavermyshop.model.Product;
 import com.ming.snavermyshop.model.User;
 import com.ming.snavermyshop.model.UserRoleEnum;
-import com.ming.snavermyshop.repository.ApiUseTimeRepository;
 import com.ming.snavermyshop.security.UserDetailsImpl;
 import com.ming.snavermyshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
-    private final ApiUseTimeRepository apiUseTimeRepository;
 
     @Autowired // 사실 생성자가 하나이기 때문에 생략 가능
-    public ProductController(
-            ProductService productService,
-            ApiUseTimeRepository apiUseTimeRepository
-    ) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.apiUseTimeRepository = apiUseTimeRepository;
     }
 
 
@@ -37,47 +30,19 @@ public class ProductController {
     @PostMapping("/api/products")
     public Product createProduct(@RequestBody ProductRequestDto requestDto,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 측정 시작 시간
-        long startTime = System.currentTimeMillis();
-
-        try {
-            // 로그인 되어 있는 회원 테이블의 ID
-            Long userId = userDetails.getUser().getId();
+        // 로그인 되어 있는 회원 테이블의 ID
+        Long userId = userDetails.getUser().getId();
 
         Product product = this.productService.createProduct(requestDto, userId); //this 생략 가능
 
 
-            // 응답 보내기
-            return product;
-        } finally {
-            // 측정 종료 시간
-            long endTime = System.currentTimeMillis();
-            // 수행시간 = 종료 시간 - 시작 시간
-            long runTime = endTime - startTime;
-
-            // 로그인 회원 정보
-            User loginUser = userDetails.getUser();
-
-            // API 사용시간 및 DB 에 기록
-            ApiUseTime apiUseTime = apiUseTimeRepository.findByUser(loginUser)
-                    .orElse(null);
-            if (apiUseTime == null) {
-                // 로그인 회원의 기록이 없으면
-                apiUseTime = new ApiUseTime(loginUser, runTime);
-            } else {
-                // 로그인 회원의 기록이 이미 있으면
-                apiUseTime.addUseTime(runTime);
-            }
-
-            System.out.println("[API Use Time] Username: " + loginUser.getUsername() + ", Total Time: " + apiUseTime.getTotalTime() + " ms");
-            apiUseTimeRepository.save(apiUseTime);
-        }
+        // 응답 보내기
+        return product;
     }
 
     /////////// 관심상품 최저가 업데이트 API ///////////
     @PutMapping("/api/products/{id}")
-    public Long updateProduct(@PathVariable Long id, @RequestBody ProductMypriceRequestDto requestDto)  {
-
+    public Long updateProduct(@PathVariable Long id, @RequestBody ProductMypriceRequestDto requestDto) {
         Product product = productService.updateProduct(id, requestDto);
 
 
@@ -90,9 +55,9 @@ public class ProductController {
     @GetMapping("/api/products")
     public Page<Product> getProducts(
             @RequestParam("page") int page,
-            @RequestParam("size")int size,
-            @RequestParam("sortBy")String sortBy,
-            @RequestParam("isAsc")boolean isAsc,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         // 로그인 되어 있는 회원 테이블의 ID
@@ -107,9 +72,9 @@ public class ProductController {
     @GetMapping("/api/admin/products")
     public Page<Product> getAllProducts(
             @RequestParam("page") int page,
-            @RequestParam("size")int size,
-            @RequestParam("sortBy")String sortBy,
-            @RequestParam("isAsc")boolean isAsc
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc
     ) {
         page = page - 1;
         return productService.getAllProducts(page, size, sortBy, isAsc);
